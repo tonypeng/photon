@@ -36,4 +36,5 @@ function ph_mb_charat($haystack, $pos) {
     return $chars[$pos];
 }
 
-require_once(join_paths(__DIR__, 'InvariantViolationException.php'));
+require_once __DIR__.'/InvariantViolationException.php';
+require_once __DIR__.'/philter/phtml/phtml_globals.php';

@@ -10,6 +10,11 @@ class IndexController implements IController {
     }
 
     public function render() {
-        return 'Hello, world!';
+        return \ph\div(["style" => "background-color: #eee; font-family: sans-serif"],
+            'Hello, world!', \ph\br(),
+            \ph\p([],
+                'Welcome to Photon!'
+            )
+        );
     }
 }
