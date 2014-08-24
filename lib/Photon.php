@@ -22,7 +22,15 @@ class Photon {
 
         $controller = new $controller_name();
 
-        echo $controller->render(); // TODO: TEMPORARY TEMPORARY TEMPORARY
+        try
+        {
+          echo $controller->render();
+        }
+        catch(PhotonRedirectException $e)
+        {
+            header();
+            die();
+        }
     }
 
     private static function getRequestURL() {
