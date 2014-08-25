@@ -39,55 +39,51 @@ class Response
     const WWW_AUTHENTICATE = "WWW-Authenticate";
     const X_FRAME_OPTIONS = "X-Frame-Options";
 
-    private $_header;
-    private $_cookies = array();
-    private $_view;
+    private static $_headers = array();
+    private static $_cookies = array();
+    private static $_view;
 
     private function __construct() { }
 
     public static function start()
     {
-      ob_start();
+        ob_start();
     }
 
-    public static function header($const, $input = '')
+    public static function header($key, $val)
     {
-        $_header = $const.': '.$input;
-        send_header($_header);
+        self::$_headers[$key] = $val;
     }
 
-    public static function setCookie($name, $value='', $expire, $path='', $domain = '')
+    public static function setCookie($name, $value='', $expire = 0, $path='', $domain = '', $secure = false, $httponly = false)
     {
-        array_push($_cookies, [$name, $value, $expire, $path, $domain]);
+        self::$_cookies[] = [$name, $value, $expire, $path, $domain, $secure, $httponly];
     }
 
-    public static function send_header($header)
+    private static function sendHeaders()
     {
-        header($header);
+        foreach (self::$_headers as $header => $val) {
+            header($header.': '.$val);
+        }
     }
 
-    public static function send_cookie($_cookies)
+    private static function sendCookies()
     {
-      // $cookie_params;
-      for($i = 0; i < count($_cookies); $i++)
-      {
-          // for ($j = 0; j < count($_cookies[i]); $j++)
-          // {
-          //       $cookie_params .= $_cookies[i][j] . ", ";
-          // }
-          // $cookie_params = implode(",", $_cookies[i]);
-          setcookie(implode(",", $_cookies[i]));
-      }
+        foreach (self::$_cookies as $cookie) {
+            call_user_func_array('setcookie', $cookie);
+        }
     }
 
     public static function setView($view)
     {
-      $this->view = $view;
+        self::$_view = $view;
     }
 
     public static function send()
     {
-      echo $this->view;
-      ob_flush();
+        self::sendHeaders();
+        self::sendCookies();
+        echo self::$_view;
+        ob_flush();
     }
 }
