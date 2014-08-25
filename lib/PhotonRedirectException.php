@@ -1,16 +1,17 @@
 <?php
 class PhotonRedirectException extends Exception
 {
-    private $url;
-    private $message;
+    private $_url;
+    private $_message;
+
     public function __construct($url, $message='')
     {
-        this->url=$url;
-        this->message = $message;
+        this->_url=$url;
+        this->_message = $message;
     }
 
     public function getURL()
     {
-        return this->$url;
+        return this->$_url;
     }
 }
