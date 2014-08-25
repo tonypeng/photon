@@ -40,22 +40,37 @@ class Response
     const X_FRAME_OPTIONS = "X-Frame-Options";
 
     private $_header;
+    private $_cookies = array();
 
     private function __construct() { }
 
     public static function header($const, $input = '')
     {
         $_header = $const.': '.$input;
-        send($_header);
+        send_header($_header);
     }
 
     public static function setCookie($name, $value='', $expire, $path='', $domain = '')
     {
-        setcookie($name, $value, $expire, $path, $domain);
+        array_push($_cookies, [$name, $value, $expire, $path, $domain]);
     }
 
-    public static function send($header)
+    public static function send_header($header)
     {
-      header($header);
+        header($header);
+    }
+
+    public static function send_cookie($_cookies)
+    {
+      // $cookie_params;
+      for($i = 0; i < count($_cookies); $i++)
+      {
+          // for ($j = 0; j < count($_cookies[i]); $j++)
+          // {
+          //       $cookie_params .= $_cookies[i][j] . ", ";
+          // }
+          // $cookie_params = implode(",", $_cookies[i]);
+          setcookie(implode(",", $_cookies[i]));
+      }
     }
 }
