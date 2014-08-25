@@ -24,11 +24,11 @@ class Photon {
 
         try
         {
-          echo $controller->render();
+            echo $controller->render();
         }
         catch(PhotonRedirectException $e)
         {
-            header();
+            header('Location: '. $e->getURL());
             die();
         }
     }

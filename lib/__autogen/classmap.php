@@ -9,6 +9,7 @@ $PHOTON__classmap = array (
   'ClassLoader' => 'lib/ClassLoader.php',
   'InvariantViolationException' => 'lib/InvariantViolationException.php',
   'Photon' => 'lib/Photon.php',
+  'PhotonRedirectException' => 'lib/PhotonRedirectException.php',
   'Request' => 'lib/Request.php',
   'Philter' => 'lib/philter/Philter.php',
   'PhilterBaseComponent' => 'lib/philter/PhilterBaseComponent.php',
