@@ -41,8 +41,14 @@ class Response
 
     private $_header;
     private $_cookies = array();
+    private $_view;
 
     private function __construct() { }
+
+    public static function start()
+    {
+      ob_start();
+    }
 
     public static function header($const, $input = '')
     {
@@ -72,5 +78,16 @@ class Response
           // $cookie_params = implode(",", $_cookies[i]);
           setcookie(implode(",", $_cookies[i]));
       }
+    }
+
+    public static function setView($view)
+    {
+      $this->view = $view;
+    }
+
+    public static function send()
+    {
+      echo $this->view;
+      ob_flush();
     }
 }

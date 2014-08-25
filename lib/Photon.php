@@ -6,6 +6,8 @@ class Photon {
     const DEFAULT_URL = 'index.php';
     const NOT_FOUND_URL = '404';
 
+    Response::start();
+
     public static function run() {
         require_once __DIR__.'/__autogen/urimap.php';
 
