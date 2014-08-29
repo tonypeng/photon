@@ -1,6 +1,7 @@
 <?php
 
-interface IController {
+interface IController
+{
 
     /**
      * @return string

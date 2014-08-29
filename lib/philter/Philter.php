@@ -1,7 +1,9 @@
 <?php
 
-class Philter {
-    public static function render(PhilterBaseComponent $root) {
+class Philter
+{
+    public static function render(PhilterBaseComponent $root)
+    {
         // keep re-rendering $root until we get to a non-simplifiable element
         while(!($root instanceof PhilterHtml)) {
             $root = $root->render();
