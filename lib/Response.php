@@ -41,7 +41,7 @@ class Response
 
     private static $_headers = array();
     private static $_cookies = array();
-    private static $_view;
+    private static $_view = '';
 
     private function __construct() { }
 
