@@ -2,11 +2,13 @@
 require_once __DIR__.'/Request.php';
 require_once __DIR__.'/IController.php';
 
-class Photon {
+class Photon
+{
     const DEFAULT_URL = 'index.php';
     const NOT_FOUND_URL = '404';
 
-    public static function run() {
+    public static function run()
+    {
         require_once __DIR__.'/__autogen/urimap.php';
 
         invariant(isset($PHOTON__urimap), 'URI map not found. Did you build?');
@@ -37,7 +39,8 @@ class Photon {
         Response::send();
     }
 
-    private static function getRequestURL() {
+    private static function getRequestURL()
+    {
         if(!isset($_GET['PHOTON__url'])) {
             return self::DEFAULT_URL;
         }

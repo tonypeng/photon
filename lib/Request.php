@@ -1,6 +1,7 @@
 <?php
 
-class Request {
+class Request
+{
     const TYPE_INT = 'int';
     const TYPE_STRING = 'string';
     const TYPE_NUMBER = 'number';
@@ -24,7 +25,8 @@ class Request {
         return self::from($_SERVER['REQUEST_METHOD'], $params);
     }
 
-    public static function from($method, $params) {
+    public static function from($method, $params)
+    {
         return new Request($method, $params);
     }
 
@@ -33,18 +35,21 @@ class Request {
 
     private $_expects;
 
-    private function __construct($method, $params) {
+    private function __construct($method, $params)
+    {
         $this->_method = $method;
         $this->_params = $params;
 
         $this->_expects = array();
     }
 
-    public function getMethod() {
+    public function getMethod()
+    {
         return $this->_method;
     }
 
-    public function expect($expects) {
+    public function expect($expects)
+    {
         foreach($expects as $param => $props) {
             invariant(array_key_exists('required', $props)
                 && array_key_exists('type', $props),
@@ -89,7 +94,8 @@ class Request {
         return $this;
     }
 
-    public function getInt($param_name) {
+    public function getInt($param_name)
+    {
         if($this->_expects) {
             // validate the param name
             invariant(array_key_exists($param_name, $this->_expects),
@@ -111,7 +117,8 @@ class Request {
         return $res;
     }
 
-    public function getString($param_name) {
+    public function getString($param_name)
+    {
         if($this->_expects) {
             // validate the param name
             invariant(array_key_exists($param_name, $this->_expects),
@@ -129,7 +136,8 @@ class Request {
         return $res . '';
     }
 
-    public function getBool($param_name) {
+    public function getBool($param_name)
+    {
         if($this->_expects) {
             // validate the param name
             invariant(array_key_exists($param_name, $this->_expects),
@@ -150,7 +158,8 @@ class Request {
         return strtob($res);
     }
 
-    public function getNumber($param_name) {
+    public function getNumber($param_name)
+    {
         if($this->_expects) {
             // validate the param name
             invariant(array_key_exists($param_name, $this->_expects),
