@@ -11,6 +11,7 @@ $PHOTON__classmap = array (
   'Photon' => 'lib/Photon.php',
   'PhotonRedirectException' => 'lib/PhotonRedirectException.php',
   'Request' => 'lib/Request.php',
+  'Response' => 'lib/Response.php',
   'Philter' => 'lib/philter/Philter.php',
   'PhilterBaseComponent' => 'lib/philter/PhilterBaseComponent.php',
   'PhilterAttribute' => 'lib/philter/PhilterBaseComponent.php',

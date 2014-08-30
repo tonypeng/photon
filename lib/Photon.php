@@ -22,6 +22,8 @@ class Photon {
 
         $controller = new $controller_name();
 
+        Response::start();
+
         try
         {
             echo $controller->render();
@@ -31,6 +33,8 @@ class Photon {
             header('Location: '. $e->getURL());
             die();
         }
+
+        Response::send();
     }
 
     private static function getRequestURL() {
