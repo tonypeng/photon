@@ -11,36 +11,33 @@ class Request
     const POST = 'POST';
 
     public static function fromRequest() {
-        $params = array();
+        $params = array_merge($_GET, $_POST);
 
-        switch ($_SERVER['REQUEST_METHOD']) {
-            case self::GET:
-                $params = $_GET;
-                break;
-            case self::POST:
-                $params = $_POST;
-                break;
-        }
-
-        return self::from($_SERVER['REQUEST_METHOD'], $params);
+        return self::from($_SERVER['REQUEST_METHOD'], $params, $_COOKIE);
     }
 
-    public static function from($method, $params)
+    public static function from($method, $params, $cookies)
     {
-        return new Request($method, $params);
+        return new Request($method, $params, $cookies);
     }
 
     private $_method;
     private $_params;
+    private $_cookies;
 
     private $_expects;
 
-    private function __construct($method, $params)
+    private function __construct($method, $params, $cookies)
     {
         $this->_method = $method;
         $this->_params = $params;
+        $this->_cookies = $cookies;
 
         $this->_expects = array();
+    }
+
+    public function set($key, $val) {
+        $this->_params[$key] = $val;
     }
 
     public function getMethod()
@@ -177,6 +174,18 @@ class Request
         if(!is_numeric($res))
             return null;
 
-        return strtob($res);
+        return $res + 0.0;
+    }
+
+    public function hasCookie($name) {
+        return isset($this->_cookies[$name]);
+    }
+
+    public function cookie($name) {
+        if(!$this->hasCookie($name)) {
+            return null;
+        }
+
+        return $this->_cookies[$name];
     }
 }

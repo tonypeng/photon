@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__.'/Request.php';
-require_once __DIR__.'/IController.php';
+require_once __DIR__ . '/Controller.php';
 
 class Photon
 {
@@ -14,15 +14,18 @@ class Photon
         invariant(isset($PHOTON__urimap), 'URI map not found. Did you build?');
 
         $url = self::getRequestURL();
-        if(!isset($PHOTON__urimap[$url])) {
-            $url = self::NOT_FOUND_URL;
+        $responder = self::getControllerForRequest($PHOTON__urimap, $url);
+
+        $controller_name = $responder[0];
+        $params = $responder[1];
+
+        $request = Request::fromRequest();
+
+        foreach ($params as $key => $val) {
+            $request->set($key, $val);
         }
-        invariant(isset($PHOTON__urimap[$url]),
-            'URL entry didn\'t exist in the URI map. Check that canonical URIs exist (e.g. index.php, Http404, etc.)'); // wtf?
 
-        $controller_name = $PHOTON__urimap[$url];
-
-        $controller = new $controller_name();
+        $controller = new $controller_name($request);
 
         Response::start();
 
@@ -71,5 +74,43 @@ class Photon
         }
 
         return $url;
+    }
+
+    private static function getControllerForRequest($uri_map, $req_url) {
+        $uri_parts = explode('/', $req_url);
+
+        // TODO: this is a quick hack; switch to regex and use OOP later
+        // Have photon build compile URLs to regex expressions that we can quickly match in this method
+        foreach($uri_map as $uri => $controller) {
+            $parameters = array();
+
+            $pattern_parts = explode('/', $uri);
+
+            if(count($uri_parts) != count($pattern_parts)) continue;
+
+            $found = true;
+
+            for($i = 0; $i  < count($pattern_parts); $i++) {
+                $pattern_part = $pattern_parts[$i];
+                $uri_part = $uri_parts[$i];
+
+                if(mb_substr($pattern_part, 0, 1) == '{' && mb_substr($pattern_part, mb_strlen($pattern_part) - 1) == '}') {
+                    $var_name = mb_substr($pattern_part, 1, mb_strlen($pattern_part) - 2);
+
+                    $parameters[$var_name] = $uri_part;
+                } else {
+                    if($uri_part != $pattern_part) {
+                        $found = false;
+                        break;
+                    }
+                }
+            }
+
+            if($found) {
+                return array($controller, $parameters);
+            }
+        }
+
+        return array($uri_map[self::NOT_FOUND_URL], []);
     }
 }
