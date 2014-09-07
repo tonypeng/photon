@@ -1,6 +1,6 @@
 <?php
 
-class IndexController implements IController
+class IndexController extends Controller
 {
     public static function getURL()
     {

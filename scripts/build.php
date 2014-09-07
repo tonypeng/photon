@@ -102,7 +102,7 @@ function processController($class, $details, $file)
 {
     global $urimap;
 
-    if($details['impl'] == 'IController') {
+    if($details['impl'] == 'Controller') {
         // TODO
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-class Http404Controller implements IController
+class Http404Controller extends Controller
 {
     public static function getURL()
     {
