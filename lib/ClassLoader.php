@@ -3,8 +3,10 @@
 /**
  * Automatically loads classes from the generated classmap.
  */
-class ClassLoader {
-    public static function register() {
+class ClassLoader
+{
+    public static function register()
+    {
         $classmap_file = join_paths(__DIR__, '__autogen/classmap.php');
 
         invariant(file_exists($classmap_file), 'Classmap not found. Did you build?');

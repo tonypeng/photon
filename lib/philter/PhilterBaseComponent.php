@@ -1,12 +1,14 @@
 <?php
 
-abstract class PhilterBaseComponent {
+abstract class PhilterBaseComponent
+{
     private static $_attrCache = array();
 
     private $_attributes;
     private $_children;
 
-    public function __construct($args) {
+    public function __construct($args)
+    {
         $attributes = array();
         $children = array();
 
@@ -46,27 +48,32 @@ abstract class PhilterBaseComponent {
         $this->_children = $children;
     }
 
-    public function getChildren() {
+    public function getChildren()
+    {
         return $this->_children;
     }
 
-    public function hasAttribute($attr) {
+    public function hasAttribute($attr)
+    {
         return isset(self::$_attrCache[get_class($this)]['key_to_attr'][$attr]);
     }
 
     public abstract function render();
 
-    public function __toString() {
+    public function __toString()
+    {
         return Philter::render($this);
     }
 
-    protected function getAttributes() {
+    protected function getAttributes()
+    {
         return $this->_attributes;
     }
 
     /* TODO: attribute validation is done kind of sketchily right now...rethink this later */
 
-    private function validateAttributes($attributes) {
+    private function validateAttributes($attributes)
+    {
         static $bools = array('true', 'false');
 
         foreach($attributes as $attr => $val) {
@@ -103,11 +110,13 @@ abstract class PhilterBaseComponent {
         }
     }
 
-    protected function getAttributeKeys() {
+    protected function getAttributeKeys()
+    {
         return array();
     }
 
-    private static function createAttributeCache($class, array $attributes) {
+    private static function createAttributeCache($class, array $attributes)
+    {
         self::$_attrCache[$class]['key_to_attr'] = array();
         self::$_attrCache[$class]['req_keys'] = array();
 
@@ -121,7 +130,8 @@ abstract class PhilterBaseComponent {
     }
 }
 
-class PhilterAttribute {
+class PhilterAttribute
+{
     const ATTR_INT = 'int';
     const ATTR_STR = 'string';
     const ATTR_NUM = 'number';
@@ -131,21 +141,25 @@ class PhilterAttribute {
     private $_type;
     private $_required;
 
-    public function __construct($name, $type=self::ATTR_STR, $required=false) {
+    public function __construct($name, $type=self::ATTR_STR, $required=false)
+    {
         $this->_name = $name;
         $this->_type = $type;
         $this->_required = $required;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->_name;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->_type;
     }
 
-    public function isRequired() {
+    public function isRequired()
+    {
         return $this->_required;
     }
 }

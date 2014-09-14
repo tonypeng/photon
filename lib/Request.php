@@ -1,6 +1,7 @@
 <?php
 
-class Request {
+class Request
+{
     const TYPE_INT = 'int';
     const TYPE_STRING = 'string';
     const TYPE_NUMBER = 'number';
@@ -10,41 +11,42 @@ class Request {
     const POST = 'POST';
 
     public static function fromRequest() {
-        $params = array();
+        $params = array_merge($_GET, $_POST);
 
-        switch ($_SERVER['REQUEST_METHOD']) {
-            case self::GET:
-                $params = $_GET;
-                break;
-            case self::POST:
-                $params = $_POST;
-                break;
-        }
-
-        return self::from($_SERVER['REQUEST_METHOD'], $params);
+        return self::from($_SERVER['REQUEST_METHOD'], $params, $_COOKIE);
     }
 
-    public static function from($method, $params) {
-        return new Request($method, $params);
+    public static function from($method, $params, $cookies)
+    {
+        return new Request($method, $params, $cookies);
     }
 
     private $_method;
     private $_params;
+    private $_cookies;
 
     private $_expects;
 
-    private function __construct($method, $params) {
+    private function __construct($method, $params, $cookies)
+    {
         $this->_method = $method;
         $this->_params = $params;
+        $this->_cookies = $cookies;
 
         $this->_expects = array();
     }
 
-    public function getMethod() {
+    public function set($key, $val) {
+        $this->_params[$key] = $val;
+    }
+
+    public function getMethod()
+    {
         return $this->_method;
     }
 
-    public function expect($expects) {
+    public function expect($expects)
+    {
         foreach($expects as $param => $props) {
             invariant(array_key_exists('required', $props)
                 && array_key_exists('type', $props),
@@ -89,7 +91,8 @@ class Request {
         return $this;
     }
 
-    public function getInt($param_name) {
+    public function getInt($param_name)
+    {
         if($this->_expects) {
             // validate the param name
             invariant(array_key_exists($param_name, $this->_expects),
@@ -111,7 +114,8 @@ class Request {
         return $res;
     }
 
-    public function getString($param_name) {
+    public function getString($param_name)
+    {
         if($this->_expects) {
             // validate the param name
             invariant(array_key_exists($param_name, $this->_expects),
@@ -129,7 +133,8 @@ class Request {
         return $res . '';
     }
 
-    public function getBool($param_name) {
+    public function getBool($param_name)
+    {
         if($this->_expects) {
             // validate the param name
             invariant(array_key_exists($param_name, $this->_expects),
@@ -150,7 +155,8 @@ class Request {
         return strtob($res);
     }
 
-    public function getNumber($param_name) {
+    public function getNumber($param_name)
+    {
         if($this->_expects) {
             // validate the param name
             invariant(array_key_exists($param_name, $this->_expects),
@@ -168,6 +174,18 @@ class Request {
         if(!is_numeric($res))
             return null;
 
-        return strtob($res);
+        return $res + 0.0;
+    }
+
+    public function hasCookie($name) {
+        return isset($this->_cookies[$name]);
+    }
+
+    public function cookie($name) {
+        if(!$this->hasCookie($name)) {
+            return null;
+        }
+
+        return $this->_cookies[$name];
     }
 }

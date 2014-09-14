@@ -30,7 +30,8 @@ writeFiles();
 
 printResult();
 
-function iterateDirectory($path, $tablevel="") {
+function iterateDirectory($path, $tablevel="")
+{
     $temp_path = $path === '' ? '.' : $path;
     $iter = new DirectoryIterator($temp_path);
 
@@ -72,7 +73,8 @@ function iterateDirectory($path, $tablevel="") {
     }
 }
 
-function writeFiles() {
+function writeFiles()
+{
     global $classmap;
 
     $classmap_out =
@@ -84,7 +86,8 @@ function writeFiles() {
     }
 }
 
-function processClassmap($class, $file) {
+function processClassmap($class, $file)
+{
     global $classmap;
 
     if(isset($classmap[$class])) {
@@ -95,15 +98,17 @@ function processClassmap($class, $file) {
     $classmap[$class] = $file;
 }
 
-function processController($class, $details, $file) {
+function processController($class, $details, $file)
+{
     global $urimap;
 
-    if($details['impl'] == 'IController') {
+    if($details['impl'] == 'Controller') {
         // TODO
     }
 }
 
-function getPHPClasses($file) {
+function getPHPClasses($file)
+{
     $code = file_get_contents($file);
 
     $classes = array();
@@ -140,7 +145,8 @@ function getPHPClasses($file) {
     return $classes;
 }
 
-function printerr() {
+function printerr()
+{
     $args = func_get_args();
     $var  = array_shift($args);
     $s    = vsprintf($var, $args);
@@ -152,7 +158,8 @@ function printerr() {
     printf($s . "\n");
 }
 
-function printResult($result=true) {
+function printResult($result=true)
+{
     global $start_time;
     $end = microtime(true);
 

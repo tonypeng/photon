@@ -1,6 +1,7 @@
 <?php
 
-function join_paths() {
+function join_paths()
+{
     $paths = array();
 
     foreach (func_get_args() as $arg) {
@@ -11,7 +12,8 @@ function join_paths() {
 }
 
 // http://www.if-not-true-then-false.com/2010/php-class-for-coloring-php-command-line-cli-scripts-output-php-output-colorizing-using-bash-shell-colors/
-class ColorCLI {
+class ColorCLI
+{
     static $foreground_colors = array(
         'black'        => '0;30', 'dark_gray'    => '1;30',
         'blue'         => '0;34', 'light_blue'   => '1;34',
@@ -31,7 +33,8 @@ class ColorCLI {
     );
 
     // Returns colored string
-    public static function getColoredString($string, $foreground_color = null, $background_color = null) {
+    public static function getColoredString($string, $foreground_color = null, $background_color = null)
+    {
         $colored_string = "";
 
         // Check if given foreground color found
@@ -50,12 +53,14 @@ class ColorCLI {
     }
 
     // Returns all foreground color names
-    public static function getForegroundColors() {
+    public static function getForegroundColors()
+    {
         return array_keys(self::$foreground_colors);
     }
 
     // Returns all background color names
-    public static function getBackgroundColors() {
+    public static function getBackgroundColors()
+    {
         return array_keys(self::$background_colors);
     }
 }
