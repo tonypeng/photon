@@ -678,3 +678,7 @@ function wbr() {
 
     return new \PhilterHtmlWbr($args);
 }
+
+function raw_html_danger($raw_html) {
+    return new \phtml_html($raw_html);
+}

@@ -1,6 +1,6 @@
 <?php
 
-class html_string extends PhilterHtml {
+class phtml_html extends PhilterHtml {
     private $_string;
 
     public function __construct($string) {
@@ -10,7 +10,7 @@ class html_string extends PhilterHtml {
     }
 
     public function renderHtml($children) {
-        return htmlspecialchars($this->_string, ENT_QUOTES, 'UTF-8');
+        return $this->_string;
     }
 
     protected function getTag() { return ''; }

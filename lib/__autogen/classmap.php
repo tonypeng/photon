@@ -7,6 +7,7 @@ $PHOTON__classmap = array (
   'IndexController' => 'app/IndexController.php',
   'Bootstrapper' => 'lib/Bootstrapper.php',
   'ClassLoader' => 'lib/ClassLoader.php',
+  'Controller' => 'lib/Controller.php',
   'InvariantViolationException' => 'lib/InvariantViolationException.php',
   'Photon' => 'lib/Photon.php',
   'PhotonRedirectException' => 'lib/PhotonRedirectException.php',
@@ -128,4 +129,5 @@ $PHOTON__classmap = array (
   'PhilterHtmlVar' => 'lib/philter/phtml/phtml.php',
   'PhilterHtmlVideo' => 'lib/philter/phtml/phtml.php',
   'PhilterHtmlWbr' => 'lib/philter/phtml/phtml.php',
+  'phtml_html' => 'lib/philter/phtml/phtml_html.php',
 );

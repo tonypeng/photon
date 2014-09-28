@@ -16,7 +16,7 @@ class IndexController extends Controller
     {
         return \ph\div(["style" => "background-color: #eee; font-family: sans-serif"],
             'Hello, world!', \ph\br(),
-            \ph\p([],
+            \ph\p(['style' => 'font-family: A B C, Comic Sans MS'],
                 'Welcome to Photon!'
             )
         );
