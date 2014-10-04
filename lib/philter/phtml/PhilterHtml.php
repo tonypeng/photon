@@ -70,7 +70,7 @@ abstract class PhilterHtml extends \PhilterBaseComponent {
         $outString = '';
 
         foreach($attributes as $key => $value) {
-            $outString .= ' '.$key.'="'.$value.'"';
+            $outString .= ' '.$key.'="'.htmlspecialchars($value, ENT_QUOTES, 'UTF-8').'"';
         }
 
         return $outString;

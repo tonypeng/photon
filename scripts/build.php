@@ -11,7 +11,7 @@ printf("Running photon build...\n");
 printf("Version 1.0\n");
 printf("\n");
 
-if(!file_exists("lib") || !file_exists("app") || !file_exists("config") || !file_exists("public")) {
+if(!file_exists("lib") || !file_exists("app") || !file_exists("public")) {
     printerr("Photon build must be run from photon root.");
     printResult(false);
 }
