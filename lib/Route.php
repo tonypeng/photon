@@ -19,7 +19,7 @@ class Route {
     public function where($varName) {
         invariant(is_string($varName));
 
-        $route_pred = new RoutePredicate($this);
+        $route_pred = new RoutePredicate($this, $varName);
 
         invariant(!isset($this->_predicates[$varName]), 'A predicate bound to %s already exists.', $varName);
 
@@ -30,6 +30,7 @@ class Route {
 
     public function compile() {
         $escaped = preg_quote($this->_pattern, '/');
+        $escaped = '^'.$escaped.'$';
 
         $this->_compiled = preg_replace_callback(self::ROUTE_COMPILE_ROUTE_VAR_PATTERN,
             function($matches) {
@@ -38,7 +39,7 @@ class Route {
                 $var_name = $matches[1];
 
                 return (isset($this->_predicates[$var_name])) ? $this->_predicates[$var_name]->compile()
-                    : RoutePredicate::DEFAULT_PATTERN;
+                    : '(?<'.$var_name.'>'.RoutePredicate::DEFAULT_PATTERN.')';
             },
             $escaped
         );
@@ -53,13 +54,15 @@ class Route {
 
 class RoutePredicate {
 
-    const DEFAULT_PATTERN = '([A-Za-z0-9_]+)';
+    const DEFAULT_PATTERN = '[A-Za-z0-9_]+';
 
     private $_route;
+    private $_var_name;
     private $_pattern;
 
-    public function __construct(Route $route) {
+    public function __construct(Route $route, $varName) {
         $this->_route = $route;
+        $this->_var_name = $varName;
         $this->_pattern = self::DEFAULT_PATTERN;
     }
 
@@ -69,22 +72,22 @@ class RoutePredicate {
     }
 
     public function integer() {
-        $this->_pattern = '([0-9]+)';
+        $this->_pattern = '[0-9]+';
         return $this;
     }
 
     public function number() {
-        $this->_pattern = '([0-9]+(?:\.[0-9]+)?)';
+        $this->_pattern = '[0-9]+(?:\.[0-9]+)?';
         return $this;
     }
 
     public function string() {
-        $this->_pattern = '(.+)';
+        $this->_pattern = '.+';
         return $this;
     }
 
     public function boolean() {
-        $this->_pattern = '(?i)(true|false|on|off|yes|no?i)(?-i)';
+        $this->_pattern = '(?i)true|false|on|off|yes|no(?-i)';
         return $this;
     }
 
@@ -93,6 +96,6 @@ class RoutePredicate {
     }
 
     public function compile() {
-        return $this->_pattern;
+        return '(?<'.$this->_var_name.'>'.$this->_pattern.')';
     }
 }

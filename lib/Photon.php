@@ -77,37 +77,16 @@ class Photon
     }
 
     private static function getControllerForRequest($uri_map, $req_url) {
-        $uri_parts = explode('/', $req_url);
 
-        // TODO: this is a quick hack; switch to regex and use OOP later
-        // Have photon build compile URLs to regex expressions that we can quickly match in this method
         foreach($uri_map as $uri => $controller) {
-            $parameters = array();
+            $route = (is_object($uri) && get_class($uri)) === 'Route' ? $uri : new Route($uri.'');
 
-            $pattern_parts = explode('/', $uri);
+            $pattern = '/'.$route->compile().'/';
 
-            if(count($uri_parts) != count($pattern_parts)) continue;
+            $matches = [];
 
-            $found = true;
-
-            for($i = 0; $i  < count($pattern_parts); $i++) {
-                $pattern_part = $pattern_parts[$i];
-                $uri_part = $uri_parts[$i];
-
-                if(mb_substr($pattern_part, 0, 1) == '{' && mb_substr($pattern_part, mb_strlen($pattern_part) - 1) == '}') {
-                    $var_name = mb_substr($pattern_part, 1, mb_strlen($pattern_part) - 2);
-
-                    $parameters[$var_name] = $uri_part;
-                } else {
-                    if($uri_part != $pattern_part) {
-                        $found = false;
-                        break;
-                    }
-                }
-            }
-
-            if($found) {
-                return array($controller, $parameters);
+            if (preg_match($pattern, $req_url, $matches)) {
+                return array($controller, $matches);
             }
         }
 
