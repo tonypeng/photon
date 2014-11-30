@@ -12,6 +12,7 @@ class Photon
         require_once __DIR__.'/__autogen/urimap.php';
 
         invariant(isset($PHOTON__urimap), 'URI map not found. Did you build?');
+        invariant(is_object($PHOTON__urimap) && $PHOTON__urimap instanceof HashMap, 'Invalid URI map.');
 
         $url = self::getRequestURL();
         $responder = self::getControllerForRequest($PHOTON__urimap, $url);
@@ -78,8 +79,12 @@ class Photon
 
     private static function getControllerForRequest($uri_map, $req_url) {
 
-        foreach($uri_map as $uri => $controller) {
-            $route = (is_object($uri) && get_class($uri)) === 'Route' ? $uri : new Route($uri.'');
+        $uri_map_keys = $uri_map->keys();
+
+        foreach($uri_map_keys as $uri) {
+            $controller = $uri_map[$uri];
+
+            $route = (is_object($uri) && $uri instanceof Route) ? $uri : new Route($uri.'');
 
             $pattern = '/'.$route->compile().'/';
 
