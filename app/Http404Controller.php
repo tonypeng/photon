@@ -1,15 +1,10 @@
 <?php
 
-class Http404Controller extends Controller
+class Http404Controller extends SiteController
 {
     public static function getURL()
     {
-        return 'index.php';
-    }
-
-    public static function getParams()
-    {
-
+        return '404';
     }
 
     public function render()

@@ -28,6 +28,10 @@ class Photon
 
         $controller = new $controller_name($request);
 
+        $invalidity = $controller->invalid();
+
+        invariant(!$invalidity, 'Controller failed validity test: '.$invalidity);
+
         Response::start();
 
         try
