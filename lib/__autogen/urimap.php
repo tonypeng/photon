@@ -1,6 +1,6 @@
 <?php
 
-$PHOTON__urimap = array(
-    'index.php' => 'IndexController',
-    '404' => 'Http404Controller',
-);
+$PHOTON__urimap = (new HashMap())
+    ->put((new Route('index.php')), 'IndexController')
+    ->put('404', 'Http404Controller')
+;
