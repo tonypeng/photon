@@ -15,15 +15,12 @@ abstract class Controller
         return '';
     }
 
-    /**
-     * @return array
-     */
-    public static function getParams() {
-        return array();
-    }
-
     protected function getRequest() {
         return $this->_request;
+    }
+
+    public function invalid() {
+        return false;
     }
 
     public abstract function render();

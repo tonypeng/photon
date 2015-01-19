@@ -6,6 +6,7 @@ class Request
     const TYPE_STRING = 'string';
     const TYPE_NUMBER = 'number';
     const TYPE_BOOL = 'bool';
+    const TYPE_ANY = 'any';
 
     const GET = 'GET';
     const POST = 'POST';
@@ -37,6 +38,11 @@ class Request
     }
 
     public function set($key, $val) {
+        invariant($this->validateSetParamWithExpect($key, $val),
+            'Requested unexpected int param %s.',
+            $key
+        );
+
         $this->_params[$key] = $val;
     }
 
@@ -45,8 +51,55 @@ class Request
         return $this->_method;
     }
 
+    private function validateSetParamWithExpect($key, $val) {
+        if($this->_expects) {
+            // validate the param name
+            if(!array_key_exists($key, $this->_expects)) {
+                return false;
+            }
+
+            $props = $this->_expects[$key];
+
+            if(!$props['required'] && $val == null) {
+                return true;
+            }
+
+            switch($props['type']) {
+                case self::TYPE_INT:
+                    return ctype_digit($val);
+                case self::TYPE_STRING:
+                    return true;
+                case self::TYPE_NUMBER:
+                    return is_numeric($val);
+                case self::TYPE_BOOL:
+                    return in_array(mb_strtolower($val), array('true', 'false'));
+            }
+
+            return true;
+        }
+
+        return true;
+    }
+
+    private function validateGetParamWithExpect($key, $type) {
+        if($this->_expects) {
+            // validate the param name
+            if(!array_key_exists($key, $this->_expects)) {
+                return false;
+            }
+
+            $props = $this->_expects[$key];
+
+            return $props['type'] == $type;
+        }
+
+        return true;
+    }
+
     public function expect($expects)
     {
+        $this->_expects = [];
+
         foreach($expects as $param => $props) {
             invariant(array_key_exists('required', $props)
                 && array_key_exists('type', $props),
@@ -55,7 +108,7 @@ class Request
             );
 
             if($props['required']) {
-                invariant(array_key_exists($param, $this->params),
+                invariant(array_key_exists($param, $this->_params),
                     'Expected %s, but it didn\'t exist.',
                     $param
                 );
@@ -93,13 +146,10 @@ class Request
 
     public function getInt($param_name)
     {
-        if($this->_expects) {
-            // validate the param name
-            invariant(array_key_exists($param_name, $this->_expects),
-                'Requested unexpected int param %s.',
-                $param_name
-            );
-        }
+        invariant($this->validateGetParamWithExpect($param_name, self::TYPE_INT),
+            'Requested unexpected bool param %s.',
+            $param_name
+        );
 
         if(!array_key_exists($param_name, $this->_params)) {
             return null;
@@ -111,18 +161,15 @@ class Request
             return null;
         }
 
-        return $res;
+        return $res+0;
     }
 
     public function getString($param_name)
     {
-        if($this->_expects) {
-            // validate the param name
-            invariant(array_key_exists($param_name, $this->_expects),
-                'Requested unexpected string param %s.',
-                $param_name
-            );
-        }
+        invariant($this->validateGetParamWithExpect($param_name, self::TYPE_STRING),
+            'Requested unexpected string param %s.',
+            $param_name
+        );
 
         if(!array_key_exists($param_name, $this->_params)) {
             return null;
@@ -135,13 +182,10 @@ class Request
 
     public function getBool($param_name)
     {
-        if($this->_expects) {
-            // validate the param name
-            invariant(array_key_exists($param_name, $this->_expects),
-                'Requested unexpected bool param %s.',
-                $param_name
-            );
-        }
+        invariant($this->validateGetParamWithExpect($param_name, self::TYPE_BOOL),
+            'Requested unexpected bool param %s.',
+            $param_name
+        );
 
         if(!array_key_exists($param_name, $this->_params)) {
             return null;
@@ -157,13 +201,10 @@ class Request
 
     public function getNumber($param_name)
     {
-        if($this->_expects) {
-            // validate the param name
-            invariant(array_key_exists($param_name, $this->_expects),
-                'Requested unexpected number param %s.',
-                $param_name
-            );
-        }
+        invariant($this->validateGetParamWithExpect($param_name, self::TYPE_NUMBER),
+            'Requested unexpected number param %s.',
+            $param_name
+        );
 
         if(!array_key_exists($param_name, $this->_params)) {
             return null;

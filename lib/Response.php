@@ -47,6 +47,7 @@ class Response
 
     public static function start()
     {
+        header(self::CONTENT_TYPE, 'text/html; charset=utf-8'); // ensure UTF-8
         ob_start();
     }
 
