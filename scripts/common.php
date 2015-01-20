@@ -64,3 +64,16 @@ class ColorCLI
         return array_keys(self::$background_colors);
     }
 }
+
+function printerr()
+{
+    $args = func_get_args();
+    $var  = array_shift($args);
+    $s    = vsprintf($var, $args);
+
+    $s = "ERROR: " . $s;
+
+    $s = ColorCLI::getColoredString($s, "white", "red");
+
+    printf($s . "\n");
+}

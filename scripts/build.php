@@ -102,7 +102,7 @@ function processController($class, $details, $file)
 {
     global $urimap;
 
-    if($details['impl'] == 'Controller') {
+    if($details['ext'] == 'Controller') {
         // TODO
     }
 }
@@ -143,19 +143,6 @@ function getPHPClasses($file)
     }
 
     return $classes;
-}
-
-function printerr()
-{
-    $args = func_get_args();
-    $var  = array_shift($args);
-    $s    = vsprintf($var, $args);
-
-    $s = "ERROR: " . $s;
-
-    $s = ColorCLI::getColoredString($s, "white", "red");
-
-    printf($s . "\n");
 }
 
 function printResult($result=true)
