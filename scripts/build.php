@@ -53,15 +53,16 @@ function iterateDirectory($path, $tablevel="")
             if($file->getExtension() != 'php') continue;
 
             // normal file
-            printf($tablevel."Processing file: %s\n", $file->getFileName());
+            // printf($tablevel."Processing file: %s\n", $file->getFileName());
 
-            $classes = getPHPClasses($file->getPathname());
+            // $classes = getPHPClasses($file->getPathname());
 
-            foreach($classes as $class => $details) {
-                $filepath = $path.'/'.$file->getFileName();
+            // foreach($classes as $class => $details) {
+            //     $filepath = $path.'/'.$file->getFileName();
 
-                processClassmap($class, $filepath);
-                processController($class, $details, $filepath);
+            //     processClassmap($class, $filepath);
+            //     processController($class, $details, $filepath);
+            shell_exec("php compile.php quiet ".$file->()." ".$tablevel);
             }
         }
     }
